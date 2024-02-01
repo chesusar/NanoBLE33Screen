@@ -6,18 +6,19 @@ screen_t screen;
 void setup()
 {
   screen = {
-    .sizeX = 135,
-    .sizeY = 240,
-    .dc = 9,
-    .rst = 9,
-    .cs = 9,
-    .spiFrecuency = 100000
-  };
+      .sizeX = 240,
+      .sizeY = 320,
+      .dc = 7,
+      .rst = 8,
+      .cs = 5,
+      .spiFrecuency = 8000000};
   screen_init(&screen);
 }
 
 void loop()
 {
-  uint8_t screenBuffer[128];
-  screen_sendBuffer(&screen, screenBuffer, 128);
+  screen_clearColor(&screen, 0xF800);
+  delay(2000);
+  screen_clearColor(&screen, 0x0780);
+  delay(2000);
 }

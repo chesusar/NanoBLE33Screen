@@ -27,4 +27,17 @@ void screen_init(screen_t *screen);
 */
 void screen_sendBuffer(screen_t *screen, uint8_t *buffer, uint32_t size);
 
+/**
+ * @brief Clears the screen to white
+ * @param screen: Screen struct
+*/
+void screen_clearWhite(screen_t *screen);
+
+/**
+ * @brief Clears the screen to RGB 5-6-5 color
+ * @param screen: Screen struct
+ * @param color: color in RGB 5-6-5 format
+*/
+void screen_clearColor(screen_t *screen, uint16_t color);
+
 #endif
