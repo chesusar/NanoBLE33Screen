@@ -60,6 +60,17 @@ void screen_drawPixel(uint8_t posX, uint8_t posY, color16_t color);
 void screen_drawImage(uint8_t posX, uint8_t posY, uint8_t sizeX, uint8_t sizeY, const uint16_t *image);
 
 /**
+ * @brief Draws an image with color acting as transparency
+ * @param posX: PosX of image in buffer coordinates
+ * @param posY: PosY of image in buffer coordinates
+ * @param sizeX: SizeX of image
+ * @param sizeY: SizeY of image
+ * @param image: Image to draw
+ * @param alpha: color to act as transparency
+ */
+void screen_drawAlphaImage(uint8_t posX, uint8_t posY, uint8_t sizeX, uint8_t sizeY, const uint16_t *image, color16_t alpha);
+
+/**
  * @brief Clears the buffer to black 0x0000
  */
 void screen_clearBuffer();

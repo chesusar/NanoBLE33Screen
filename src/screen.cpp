@@ -26,11 +26,9 @@ void screen_init(screen_t *screen)
     pinMode(screen->cs, OUTPUT);
     pinMode(screen->rst, OUTPUT);
     pinMode(screen->dc, OUTPUT);
-    if (screen->blk != -1)
-    {
-        pinMode(screen->blk, OUTPUT);
-        digitalWrite(screen->blk, HIGH);
-    }
+
+    pinMode(screen->blk, OUTPUT);
+    digitalWrite(screen->blk, HIGH);
     // Reset
     digitalWrite(screen->rst, HIGH);
     delayMicroseconds(10);
@@ -133,6 +131,29 @@ void screen_drawImage(uint8_t posX, uint8_t posY, uint8_t sizeX, uint8_t sizeY, 
     }
 }
 
+void screen_drawAlphaImage(uint8_t posX, uint8_t posY, uint8_t sizeX, uint8_t sizeY, const uint16_t *image, color16_t alpha)
+{
+    for (uint8_t x = 0; x < sizeX; x++)
+    {
+        for (uint8_t y = 0; y < sizeY; y++)
+        {
+            uint8_t indexX = posX + x;
+            uint8_t indexY = posY + y;
+
+            if (indexX >= BUFFER_SIZE_X || indexY >= BUFFER_SIZE_Y)
+                continue;
+
+            color16_t pixel;
+            uint16_t imageColor = image[x + sizeX * y];
+            if (imageColor == alpha.color16)
+                continue;
+            pixel.color8[0] = (uint8_t)(imageColor >> 8); // transform to big endian
+            pixel.color8[1] = (uint8_t)(imageColor & 0x00FF);
+            screenBuffer[indexX + BUFFER_SIZE_X * indexY] = pixel;
+        }
+    }
+}
+
 void screen_clearBuffer()
 {
     color16_t color = {.color16 = 0x0000};
@@ -166,8 +187,7 @@ void screen_sleepIn(screen_t *screen)
     digitalWrite(screen->cs, LOW);
     screen_sendCommand(screen, 0x10);
     SPI.endTransaction();
-    if (screen->blk != -1)
-        digitalWrite(screen->blk, LOW);
+    digitalWrite(screen->blk, LOW);
 }
 
 void screen_sleepOut(screen_t *screen)
@@ -176,8 +196,7 @@ void screen_sleepOut(screen_t *screen)
     digitalWrite(screen->cs, LOW);
     screen_sendCommand(screen, 0x11);
     SPI.endTransaction();
-    if (screen->blk != -1)
-        digitalWrite(screen->blk, HIGH);
+    digitalWrite(screen->blk, HIGH);
 }
 
 void screen_setBrightness(screen_t *screen, uint8_t brightness)
