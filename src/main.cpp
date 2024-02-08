@@ -8,7 +8,8 @@
 typedef enum state_t
 {
   STATE_IMG_1,
-  STATE_IMG_2
+  STATE_IMG_2,
+  STATE_IMG_3
 } state_t;
 
 screen_t screen;
@@ -80,6 +81,15 @@ void screenLoop()
   else if (currentState == STATE_IMG_2)
   {
     screen_drawImage(0, 0, 135, 240, img3);
+    if (stateTime >= STATE_MAX_TIME)
+    {
+      currentState = STATE_IMG_3;
+      stateTime = 0;
+    }
+  }
+  else if (currentState == STATE_IMG_3)
+  {
+    screen_drawImage(0, 0, 135, 240, img4);
     if (stateTime >= STATE_MAX_TIME)
     {
       currentState = STATE_IMG_1;
